@@ -1,34 +1,36 @@
-// var prompt = require('prompt');
+var prompt = require('prompt');
 
-// prompt.start();
+prompt.start();
 
-// prompt.get([{
-//     name: 'player1',
-//     type: 'string',
-//     required: true,
-//     pattern: /scissors|rock|paper/,
-//     message: 'You must choose Rock, Paper, or Scissors.'
-// }, {
-//     name: 'player2',
-//     type: 'string',
-//     required: true,
-//     pattern: /scissors|rock|paper/,
-//     message: 'You must choose Rock, Paper, or Scissors.'
-// }], function(err, result){
-//     console.log('Player choices:');
-//     console.log('Player 1 Choice: ' + result.player1);
-//     console.log('Player 2 Choice: ' + result.player2);
-//     test(result.player1, result.player2)
-// });
+prompt.get([{
+	name: 'player1',
+	required: true,
+	message: 'P1 Choose rock, paper, or scissors',
+	pattern: /^rock$|^paper$|^scissors$|^Rock$|^Paper$|^Scissors$/,
+}, {
+	name: 'player2',
+	required: true,
+	message: 'P2 Choose rock, paper, or scissors',
+	pattern: /^rock$|^paper$|^scissors$|^Rock$|^Paper$|^Scissors$/,
+}], function(err, result){
+	console.log(round_winner(result.player1, result.player2));
+});
 
-// test = prompt.get(['Player1', 'Player2'], function (err, result) {
-// 	console.log('Command-line input received:');
-//     console.log('  username: ' + result.username);
-//     console.log('  email: ' + result.email);
-//  	console.log(result.Player1);
-// });
-
-function choose_winner(p1_weapon, p2_weapon) {
+// Determine the winner of a round of Rock, Paper, Scissors
+//
+// p1_weapon - string containing player 1's weapon selection
+// p2_weapon - string containing player 2's weapon selection
+// 
+// Examples
+//
+// round_winner("rock","paper")
+// => "Player 2 Wins!"
+//
+// round_winner("rock","rock")
+// => ""It's a tie!"
+//
+// returns string with victory message
+function round_winner(p1_weapon, p2_weapon) {
 	p1_weapon = p1_weapon.toLowerCase();
 	p2_weapon = p2_weapon.toLowerCase();
 	var winner = "It's a tie!";
@@ -58,10 +60,58 @@ function choose_winner(p1_weapon, p2_weapon) {
 			}
 			break
 	}
-	return winner
+	return winner;
 }
 
-console.log(choose_winner("rock","paper"));
+// Validate that a string is a valid option for Rock, Paper, Scissors
+//
+// input - the string to be validated
+// 
+// Examples
+//
+// is_valid("rock")
+// => true
+//
+// is_valid("shotgun")
+// => false
+//
+// returns boolean indicating whether input is valid
+function is_valid(input) {
+	var expression = /^rock$|^paper$|^scissors$|^Rock$|^Paper$|^Scissors$/;
+	return expression.test(input);
+}
+
+function test_winner() {
+	var expected_results = ["Player 1 Wins!","Player 2 Wins!","It's a tie!"];
+	var actual_results = [];
+	actual_results [0] = round_winner("rock", "scissors");
+	actual_results [1] = round_winner("rock", "paper");
+	actual_results [2] = round_winner("scissors", "scissors");
+	if (expected_results.toString() === actual_results.toString()) {
+		console.log("Pass");
+	}
+	else {
+		console.log("Fail");
+	}
+}
+
+function test_validity() {
+	var expected_results = [true,true,false,false,false,false];
+	var actual_results = [];
+	actual_results[0] = is_valid("rock");
+	actual_results[1] = is_valid("Rock");
+	actual_results[2] = is_valid("arock");
+	actual_results[3] = is_valid("rocka");
+	actual_results[4] = is_valid("arocka");
+	actual_results[5] = is_valid("aa");
+	if (expected_results.toString() === actual_results.toString()) {
+		console.log("Pass");
+	}
+	else {
+		console.log("Fail");
+	}
+}
+
 
 
 	
